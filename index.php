@@ -9,15 +9,10 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
 include('config.php');
 
-
-
-/*
- * Welcome to Learn Lesson
- * This is very Simple PHP Code of Caching
- */
-
-// Require Library
 //require_once("phpfastcache.php");
+
+phpFastCache::setup("path", dirname(__FILE__).'/cache'); // Path For Files
+
 
 // simple Caching with:
 $cache = phpFastCache();
