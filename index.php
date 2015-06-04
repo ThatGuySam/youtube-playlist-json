@@ -33,7 +33,7 @@ if($content == null) {
 	
 	//$content = "DB QUERIES | FUNCTION_GET_PRODUCTS | ARRAY | STRING | OBJECTS";
 	// Write products to Cache in 10 minutes with same keyword
-	$cache->set("product_page",$content , 10);
+	$cache->set("periscope-tweets",$content , 10);
 
 	//echo "Used API <br><br>";
 
