@@ -5,18 +5,42 @@
 		'::1'
 	);
 	
-	if(in_array($_SERVER['REMOTE_ADDR'], $whitelist)){
+	$config_vars = array(
+	    "TWITTER_CONSUMER_KEY"		=> 0,
+	    "TWITTER_CONSUMER_SECRET"	=> 0,
+	    "OAUTH_TOKEN"				=> 0,
+	    "OAUTH_SECRET"				=> 0,
+	    "POSTS_COUNT"				=> 10,
+	    "TWITTER_USER"				=> 'ThatGuySam',
+	    "TWITTER_SLUG"				=> 'periscope-stream'
+	);
+	
+	//Dev Values
+	if(in_array($_SERVER['REMOTE_ADDR'], $whitelist)) include('config-dev.php');
+	
+	
+	//Steup Config Vars as Constants
+	foreach( $config_vars as $key => $default ){
 		
-		include('config-dev.php');
+		$val = getenv($key);
 		
-	} else {
+		if( empty( $val ) ) $val = $default;
 		
-		// The OAuth credentials you received when registering your app at Twitter
-		define("TWITTER_CONSUMER_KEY", getenv('TWITTER_CONSUMER_KEY'));
-		define("TWITTER_CONSUMER_SECRET", getenv('TWITTER_CONSUMER_SECRET'));
-		
-		// The OAuth data for the twitter account
-		define("OAUTH_TOKEN", getenv('TWITTER_USER'));
-		define("OAUTH_SECRET", getenv('TWITTER_USER'));
+		define($key, $val);
 		
 	}
+	
+/*
+	// The OAuth credentials you received when registering your app at Twitter
+	define("TWITTER_CONSUMER_KEY", getenv('TWITTER_CONSUMER_KEY'));
+	define("TWITTER_CONSUMER_SECRET", getenv('TWITTER_CONSUMER_SECRET'));
+	
+	// The OAuth data for the twitter account
+	define("OAUTH_TOKEN", getenv('TWITTER_USER'));
+	define("OAUTH_SECRET", getenv('TWITTER_USER'));
+	
+	
+	define("POSTS_COUNT", getenv('POSTS_COUNT'));
+*/
+	
+	//"ThatGuySam"

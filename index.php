@@ -23,17 +23,17 @@ $content = $cache->get("periscope-tweets");
 
 if($content == null) {
 	
-	$connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $access_token, $access_token_secret);
+	$connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_SECRET);
 	$content = $connection->get("lists/statuses", array(
 		"slug" => "periscope-stream",
-		"owner_screen_name" => "ThatGuySam",
-		"count" => 50,
+		"owner_screen_name" => TWITTER_USER,
+		"count" => intval(POSTS_COUNT),
 		"exclude_replies" => true
 	));
 	
 	//$content = "DB QUERIES | FUNCTION_GET_PRODUCTS | ARRAY | STRING | OBJECTS";
 	// Write products to Cache in 10 minutes with same keyword
-	$cache->set("periscope-tweets",$content , 10);
+	$cache->set("periscope-tweets",$content , 10 );
 
 	//echo "Used API <br><br>";
 
