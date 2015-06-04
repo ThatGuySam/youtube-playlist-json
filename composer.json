@@ -1,0 +1,16 @@
+{
+    "name": "Sam/tth-streams",
+    "authors": [
+        {
+            "name": "Sam Carlton",
+            "email": "thatguy@samuelcarlton.com"
+        }
+    ],
+    "require": {
+		"php": ">=5.4.0",
+		"abraham/twitteroauth": "0.5.2",
+		"fennb/phirehose": "1.0.1",
+		"phpfastcache/phpfastcache": "3.0.5"
+    }
+    
+}
