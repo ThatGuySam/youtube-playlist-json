@@ -10,9 +10,11 @@
 	    "TWITTER_CONSUMER_SECRET"	=> 0,
 	    "OAUTH_TOKEN"				=> 0,
 	    "OAUTH_SECRET"				=> 0,
-	    "POSTS_COUNT"				=> 10,
+	    "POSTS_COUNT"				=> 20,
 	    "TWITTER_USER"				=> 'ThatGuySam',
-	    "TWITTER_SLUG"				=> 'periscope-stream'
+	    "TWITTER_SLUG"				=> 'periscope-stream',
+	    "API_KIND"					=> 'search/tweets',
+	    "QUERY"						=> 'q=#nature'
 	);
 	
 	//Dev Values
