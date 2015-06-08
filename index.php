@@ -19,7 +19,7 @@ $cache = phpFastCache();
 
 // Try to get $content from Caching First
 // product_page is "identity keyword";
-$content = $cache->get("periscope-tweets");
+$content = $cache->get(TWITTER_SLUG);
 
 if($content == null) {
 	
@@ -33,7 +33,7 @@ if($content == null) {
 	
 	//$content = "DB QUERIES | FUNCTION_GET_PRODUCTS | ARRAY | STRING | OBJECTS";
 	// Write products to Cache in 10 minutes with same keyword
-	$cache->set("periscope-tweets",$content , 10 );
+	$cache->set( TWITTER_SLUG , $content , 6 );
 
 	//echo "Used API <br><br>";
 
