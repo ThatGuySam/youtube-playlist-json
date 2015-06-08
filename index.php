@@ -25,7 +25,7 @@ if($content == null) {
 	
 	$connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_SECRET);
 	$content = $connection->get("lists/statuses", array(
-		"slug" => "periscope-stream",
+		"slug" => TWITTER_SLUG,
 		"owner_screen_name" => TWITTER_USER,
 		"count" => intval(POSTS_COUNT),
 		"exclude_replies" => true
