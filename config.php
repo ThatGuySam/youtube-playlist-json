@@ -14,7 +14,8 @@
 	    "TWITTER_USER"				=> 'ThatGuySam',
 	    "TWITTER_SLUG"				=> 'periscope-stream',
 	    "API_KIND"					=> 'search/tweets',
-	    "QUERY"						=> 'q=#nature'
+	    "QUERY"						=> 'q=#nature',
+	    "RESULT_TYPE"				=> 'recent'
 	);
 	
 	//Dev Values

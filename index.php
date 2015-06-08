@@ -30,7 +30,7 @@ if($content == null) {
 		"owner_screen_name"		=> TWITTER_USER,
 		"count"					=> intval(POSTS_COUNT),
 		"exclude_replies"		=> true,
-		"result_type"			=> "recent"
+		"result_type"			=> RESULT_TYPE
 	));
 	
 	//$content = "DB QUERIES | FUNCTION_GET_PRODUCTS | ARRAY | STRING | OBJECTS";
