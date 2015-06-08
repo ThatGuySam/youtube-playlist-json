@@ -24,11 +24,13 @@ $content = $cache->get(TWITTER_SLUG);
 if($content == null) {
 	
 	$connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_SECRET);
-	$content = $connection->get("lists/statuses", array(
-		"slug" => TWITTER_SLUG,
-		"owner_screen_name" => TWITTER_USER,
-		"count" => intval(POSTS_COUNT),
-		"exclude_replies" => true
+	$content = $connection->get(API_KIND, array(
+		"slug"					=> TWITTER_SLUG,
+		"q"						=> QUERY,
+		"owner_screen_name"		=> TWITTER_USER,
+		"count"					=> intval(POSTS_COUNT),
+		"exclude_replies"		=> true,
+		"result_type"			=> "recent"
 	));
 	
 	//$content = "DB QUERIES | FUNCTION_GET_PRODUCTS | ARRAY | STRING | OBJECTS";
