@@ -1,0 +1,6 @@
+{
+  "name": "Live Twitter Stream",
+  "description": "A PHP app for return JSON ",
+  "repository": "https://github.com/ThatGuySam/tth-stream",
+  "keywords": ["twitter", "live", "api"]
+}
