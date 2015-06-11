@@ -15,7 +15,8 @@
 	    "TWITTER_SLUG"				=> 'periscope-stream',
 	    "API_KIND"					=> 'search/tweets',
 	    "QUERY"						=> 'q=#nature',
-	    "RESULT_TYPE"				=> 'recent'
+	    "RESULT_TYPE"				=> 'recent',
+	    "CACHE_TIME"				=> 10
 	);
 	
 	//Dev Values

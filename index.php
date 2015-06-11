@@ -35,7 +35,7 @@ if($content == null) {
 	
 	//$content = "DB QUERIES | FUNCTION_GET_PRODUCTS | ARRAY | STRING | OBJECTS";
 	// Write products to Cache in 10 minutes with same keyword
-	$cache->set( TWITTER_SLUG , $content , 6 );
+	$cache->set( TWITTER_SLUG , $content , CACHE_TIME );
 
 	//echo "Used API <br><br>";
 
