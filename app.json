@@ -1,6 +1,6 @@
 {
   "name": "Live Twitter Stream",
-  "description": "A PHP app for return JSON ",
+  "description": "A PHP app for returning JSON of tweets",
   "repository": "https://github.com/ThatGuySam/tth-stream",
   "keywords": ["twitter", "live", "api"]
 }
