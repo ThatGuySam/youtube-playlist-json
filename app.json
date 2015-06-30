@@ -1,6 +1,6 @@
 {
-  "name": "Live Twitter Stream",
-  "description": "A PHP app for returning JSON of tweets",
-  "repository": "https://github.com/ThatGuySam/tth-stream",
-  "keywords": ["twitter", "live", "api"]
+  "name": "Youtube Playlist JSON",
+  "description": "Returns JSON of Youtube Playlist using YouTube Data API v3",
+  "repository": "https://github.com/ThatGuySam/youtube-playlist-json",
+  "keywords": ["youtube", "playlist", "data", "json", "api"]
 }

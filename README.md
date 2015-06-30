@@ -1,4 +1,4 @@
-# tth-stream
-Twitter JSON Feed for TTH15 Stream
+# youtube-playlist-json
+Youtube Playlist JSON
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)

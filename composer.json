@@ -10,7 +10,8 @@
 		"php": ">=5.4.0",
 		"abraham/twitteroauth": "0.5.2",
 		"fennb/phirehose": "1.0.1",
-		"phpfastcache/phpfastcache": "3.0.5"
+		"phpfastcache/phpfastcache": "3.0.5",
+        "madcoda/php-youtube-api": "^1.1"
     }
     
 }
