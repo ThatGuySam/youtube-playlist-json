@@ -5,6 +5,11 @@
 		'::1'
 	);
 	
+	$tokens = explode('/', $_SERVER['REQUEST_URI']);
+	$id = $tokens[sizeof($tokens)-1];
+	
+	$debug = $request;
+	
 	$config_vars = array(
 	    "TWITTER_CONSUMER_KEY"		=> 0,
 	    "TWITTER_CONSUMER_SECRET"	=> 0,
