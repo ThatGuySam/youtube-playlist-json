@@ -2,7 +2,6 @@
 
 require "vendor/autoload.php";
 
-//use Abraham\TwitterOAuth\TwitterOAuth;
 //require_once('vendor/fennb/phirehose/lib/Phirehose.php');
 //require_once('vendor/fennb/phirehose/lib/OauthPhirehose.php');
 
