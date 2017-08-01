@@ -27,7 +27,7 @@ $content = null;
 
 if($content == null) {
 
-	$youtube = new Youtube(array('key' => $_ENV['GOOGLE_API_KEY']));
+	$youtube = new Madcoda\Youtube\Youtube(array('key' => $_ENV['GOOGLE_API_KEY']));
 
 	$content = $youtube->getPlaylistItemsByPlaylistId($playlist_id);
 
