@@ -8,7 +8,7 @@
     ],
     "require": {
 		"php": ">=5.4.0",
-		"phpfastcache/phpfastcache": "3.0.5",
+		"phpfastcache/phpfastcache": "6.0.4",
         "madcoda/php-youtube-api": "^1.2.4",
         "vlucas/phpdotenv": "^2.4"
     }

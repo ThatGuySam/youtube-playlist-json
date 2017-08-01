@@ -17,5 +17,3 @@
 		$dotenv = new Dotenv\Dotenv(__DIR__);
 		$dotenv->load();
 	}
-
-	phpFastCache::setup("path", dirname(__FILE__).'/cache'); // Path For Files
