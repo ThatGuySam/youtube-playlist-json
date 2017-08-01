@@ -1,3 +1,5 @@
+<?php
+
 function debug( $thing ) {
 
 	ob_start();
