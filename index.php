@@ -8,7 +8,7 @@ require "vendor/autoload.php";
 use Madcoda\Youtube;
 
 
-include('config.php');
+include('./config.php');
 
 //require_once("phpfastcache.php");
 
@@ -20,19 +20,19 @@ $cache = phpFastCache();
 
 // Try to get $content from Caching First
 // product_page is "identity keyword";
-$content = $cache->get(PLAYLIST_ID);
+$content = $cache->get($_ENV['PLAYLIST_ID']);
 
 $content = null;
 
 if($content == null) {
-	
-	$youtube = new Youtube(array('key' => YOUTUBE_API_KEY));
-	
-	$content = $youtube->getPlaylistItemsByPlaylistId(PLAYLIST_ID);
-	
+
+	$youtube = new Youtube(array('key' => $_ENV['GOOGLE_API_KEY']));
+
+	$content = $youtube->getPlaylistItemsByPlaylistId($_ENV['PLAYLIST_ID']);
+
 	//$content = "DB QUERIES | FUNCTION_GET_PRODUCTS | ARRAY | STRING | OBJECTS";
 	// Write products to Cache in 10 minutes with same keyword
-	$cache->set( PLAYLIST_ID , $content , CACHE_TIME );
+	$cache->set( $_ENV['PLAYLIST_ID'] , $content , $_ENV['CACHE_TIME'] );
 
 	//echo "Used API <br><br>";
 
