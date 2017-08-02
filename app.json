@@ -2,10 +2,11 @@
   "name": "Youtube Playlist JSON",
   "description": "Returns JSON of Youtube Playlist using YouTube Data API v3",
   "repository": "https://github.com/ThatGuySam/youtube-playlist-json",
-  "keywords": ["youtube", "playlist", "data", "json", "api"],
+  "keywords": ["youtube", "playlist", "data", "google", "json", "api"],
   "env": {
     "GOOGLE_API_KEY": {
       "description": "The API Key for the app to use. You can get one here: https://console.cloud.google.com/apis/credentials",
+      "value": "ExampleGoogleApiKey_ReplaceMe"
     },
     "PLAYLIST_ID": {
       "description": "The playist to display the JSON of.",
