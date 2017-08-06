@@ -5,6 +5,8 @@
 
 	// Get helper functions
 	require_once('./helpers.php');
+	// Get regular functions
+	require_once('./functions.php');
 
 	$local = array(
 		'127.0.0.1',

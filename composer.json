@@ -7,10 +7,11 @@
         }
     ],
     "require": {
-		"php": ">=5.4.0",
-		"phpfastcache/phpfastcache": "6.0.4",
-        "madcoda/php-youtube-api": "^1.2.4",
-        "vlucas/phpdotenv": "^2.4"
+  		"php": ">=5.4.0",
+  		"phpfastcache/phpfastcache": "6.0.4",
+      "madcoda/php-youtube-api": "^1.2.4",
+      "vlucas/phpdotenv": "^2.4",
+      "kitetail/zttp": "^0.2"
     }
 
 }
