@@ -45,3 +45,8 @@
 
     return $response->json();
   }
+
+  function getYoutubePreview($id) {
+    $youtube_url =  makeYoutubeUrl($id);
+    return requestGifsApi($youtube_url);
+  }

@@ -11,3 +11,7 @@ function debug( $thing ) {
 	echo $output;
 
 }
+
+function makeYoutubeUrl($id) {
+	return 'https://www.youtube.com/watch?v=' . $id;
+}

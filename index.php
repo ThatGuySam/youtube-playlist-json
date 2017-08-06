@@ -8,7 +8,8 @@ $request = $tokens[1];
 
 if( $request === 'preview' ){
 
-	$gif = requestGifsApi();
+	$id = $tokens[2];
+	$gif = getYoutubePreview($id);
 	debug($gif);
 	// echo $gif;
 
