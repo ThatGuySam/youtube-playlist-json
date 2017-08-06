@@ -9,6 +9,9 @@
   global $cache;
   $cache = new Psr16Adapter('Files');
 
+  global $previews_to_check;
+  $previews_to_check = array();
+
   function getPlaylist($playlist_id){
     global $cache;
     // No playlist id in url? Get it from the env then
@@ -75,4 +78,25 @@
     return $content;
   }
 
-  
+  function handlePlaylist($playlist) {
+    global $previews_to_check;
+    $output = $playlist;
+
+    foreach ($output as $key => $video) {
+      $id = $video->contentDetails->videoId;
+
+      if( hasYoutubePreview($id) ){
+        $gif = getYoutubePreview($id);
+        $output[$key]->snippet->thumbnails->gif = (object)[
+          'url' => $gif["success"]["files"]["gif"]
+        ];
+        $output[$key]->snippet->thumbnails->mp4 = (object)[
+          'url' => $gif["success"]["files"]["mp4"]
+        ];
+        // debug( $output[$key]->snippet->thumbnails );
+      } else {
+        $previews_to_check[] = $id;
+      }
+    }// foreach
+    return $output;
+  }
