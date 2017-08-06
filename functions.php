@@ -46,21 +46,33 @@
     return $response->json();
   }
 
+  function hasYoutubePreview($id) {
+    $cache_id = 'youtube_preview_' . $id;
+    global $cache;
+    if($cache->has($cache_id)){
+      return $cache->get($cache_id);
+    } else {
+      return false;
+    }
+  }
+
   function getYoutubePreview($id) {
     $cache_id = 'youtube_preview_' . $id;
     global $cache;
-
+    $one_day = 3600 * 24;
     // Try to get $content from Caching First
     if(!$cache->has($cache_id)){
         // Setter action
         $youtube_url = makeYoutubeUrl($id);
         $content = requestGifsApi($youtube_url);
 
-        $cache->set($cache_id, $content, $_ENV['CACHE_TIME']);
-    }else{
+        $cache->set($cache_id, $content, $one_day);
+    } else{
         // Getter action
         $content = $cache->get($cache_id);
     }
 
     return $content;
   }
+
+  

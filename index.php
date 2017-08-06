@@ -7,13 +7,29 @@ $tokens = explode('/', $_SERVER['REQUEST_URI']);
 $request = $tokens[1];
 
 if( $request === 'preview' ){
+	ignore_user_abort(true);
+	set_time_limit(0);
+	ob_start();
+	// do initial processing here
+	header('Access-Control-Allow-Origin: *');
+	header('Content-Type: application/json');
 
 	$id = $tokens[2];
-	$gif = getYoutubePreview($id);
-	debug($gif);
-	// echo $gif;
 
-	die;
+	$gif = getYoutubePreview($id);
+	echo json_encode($gif["success"]);
+	//debug( $gif );
+
+	// Close connection
+	header('Connection: close');
+	header('Content-Length: '.ob_get_length());
+	ob_end_flush();
+	ob_flush();
+	flush();
+	// After HTTP is sent
+
+
+
 } else {
 	// Use request path as playlist id
 	$playlist_id = $request;
