@@ -35,18 +35,32 @@
 
   function requestGifsApi($source = 'https://vine.co/v/ibAU6OH2I0K') {
 
+    $output = false;
+
     $gifs_api_url = 'https://api.gifs.com/media/import';
     $headers = array(
       'Gifs-API-Key' => $_ENV['GIFS_API_KEY'],
       'Content-Type' => 'application/json'
     );
-
-    $response = Zttp::withHeaders($headers)->post($gifs_api_url, [
+    $body = array(
       'source' => $source,
       'title' => 'RoboGif!',
-    ]);
+    );
 
-    return $response->json();
+    try {
+
+      $response = Zttp::withHeaders($headers)->post($gifs_api_url, $body);
+
+    	if($response->body()) {
+        $output = $response;
+    	} else {
+    			// $app['monolog']->warning('Failed to decode JSON, will retry later');
+    	}// if
+    } catch(Exception $e) {
+    		// $app['monolog']->warning('Failed to call API, will retry later');
+    }// try
+
+    return $output;
   }
 
   function hasYoutubePreview($id) {
@@ -67,7 +81,8 @@
     if(!$cache->has($cache_id)){
         // Setter action
         $youtube_url = makeYoutubeUrl($id);
-        $content = requestGifsApi($youtube_url);
+        $response = requestGifsApi($youtube_url);
+        $content = $response->json();
 
         $cache->set($cache_id, $content, $one_day);
     } else{
