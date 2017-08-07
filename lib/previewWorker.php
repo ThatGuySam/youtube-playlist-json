@@ -2,6 +2,9 @@
   // Worker
   include_once('../config.php');
 
+  // https://devcenter.heroku.com/articles/php-workers
+  // https://github.com/heroku-examples/php-worker-demo
+
   use PhpAmqpLib\Message\AMQPMessage;
 
   $connection = makeConnection();
