@@ -2,13 +2,9 @@
   // Worker
   include_once('../config.php');
 
-  use PhpAmqpLib\Connection\AMQPStreamConnection;
   use PhpAmqpLib\Message\AMQPMessage;
 
-  $rabbitmq = parse_url(getenv('CLOUDAMQP_URL'));
-  $rabbitmq_port = isset($rabbitmq['port']) ? $rabbitmq['port'] : 5672;
-  $rabbitmq_vhost = substr($rabbitmq['path'], 1) ?: '/';
-  $connection = new AMQPStreamConnection($rabbitmq['host'], $rabbitmq_port, $rabbitmq['user'], $rabbitmq['pass'], $rabbitmq_vhost);
+  $connection = makeConnection();
   $channel = $connection->channel();
 
   $channel->queue_declare('task_queue', false, true, false, false);

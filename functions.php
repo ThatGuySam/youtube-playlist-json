@@ -11,6 +11,9 @@
   // Clear cache
   // $cache->clear();
 
+  use PhpAmqpLib\Message\AMQPMessage;
+  use PhpAmqpLib\Connection\AMQPStreamConnection;
+
   global $previews_to_check;
   $previews_to_check = array();
 
@@ -198,4 +201,33 @@
       }
     }// foreach
     return $output;
+  }
+
+  global $AMQPStreamConnection;
+  $AMQPStreamConnection = false;
+
+  function makeConnection(){
+    global $AMQPStreamConnection;
+    
+    if($AMQPStreamConnection){
+      $connection = $AMQPStreamConnection;
+    } else {
+      $rabbitmq = parse_url(getenv('CLOUDAMQP_URL'));
+      $rabbitmq['port'] = isset($rabbitmq['port']) ? $rabbitmq['port'] : 5672;
+      $rabbitmq['path'] = substr($rabbitmq['path'], 1) ?: '/';
+      $connection = new AMQPStreamConnection($rabbitmq['host'], $rabbitmq['port'], $rabbitmq['user'], $rabbitmq['pass'], $rabbitmq['path']);
+    }
+
+    return $connection;
+  }
+
+  function runPreviewWorker() {
+    $connection = makeConnection();
+    $channel = $connection->channel();
+    $channel->queue_declare('task_queue', false, true, false, false);
+
+    $msg = new AMQPMessage('', ['delivery_mode' => 2]);
+    $channel->basic_publish($msg, '', 'task_queue');
+    $channel->close();
+    $connection->close();
   }

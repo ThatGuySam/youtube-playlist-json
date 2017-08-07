@@ -17,6 +17,12 @@ if( $request === 'generate-a-preview' ){
 	$playlist_id = $request;
 	$playlist = getPlaylist($playlist_id);
 	$output = handlePlaylist($playlist);
+
+}
+
+$previews_to_check = getPreviewsToCheck();
+if(!empty($previews_to_check)){
+	runPreviewWorker();
 }
 //debug( $debug );
 
