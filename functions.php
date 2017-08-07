@@ -8,6 +8,8 @@
   use phpFastCache\Helper\Psr16Adapter;
   global $cache;
   $cache = new Psr16Adapter('Files');
+  // Clear cache
+  // $cache->clear();
 
   global $previews_to_check;
   $previews_to_check = array();
@@ -51,7 +53,7 @@
 
       $response = Zttp::withHeaders($headers)->post($gifs_api_url, $body);
 
-    	if($response->body()) {
+    	if($response->getBody()) {
         $output = $response;
     	} else {
     			// $app['monolog']->warning('Failed to decode JSON, will retry later');
@@ -64,7 +66,7 @@
   }
 
   function hasYoutubePreview($id) {
-    $cache_id = 'youtube_preview_' . $id;
+    $cache_id = getCacheID($id);
     global $cache;
     if($cache->has($cache_id)){
       return $cache->get($cache_id);
@@ -73,8 +75,90 @@
     }
   }
 
+  function updatePreviewsToCheck($new_previews) {
+    global $cache;
+    $cache_id = 'previews_to_check';
+    $cache->set($cache_id, $new_previews, 99999999);
+  }
+
+  function getPreviewsToCheck() {
+    global $cache;
+    $cache_id = 'previews_to_check';
+    $one_day = 3600 * 24;
+    // Try to get $content from Caching First
+    if(!$cache->has($cache_id)){
+        // Setter action
+        $content = array();
+        updatePreviewsToCheck($content);
+    } else{
+        // Getter action
+        $content = $cache->get($cache_id);
+    }
+
+    return $content;
+  }
+
+  function addPreviewToCheck($id) {
+    global $cache;
+    $cache_id = 'previews_to_check';
+    $previews = getPreviewsToCheck();
+
+    // Not id previews_to_check yet?
+    if(!in_array($id, $previews)){
+      // Add it to the array
+      array_push($previews, $id);
+      // Cache the array
+      $cache->set($cache_id, $previews);
+    }
+  }
+
+  function generateAPreview($msg = false){
+    global $cache;
+    // Get the previews
+    $previews_to_check = getPreviewsToCheck();
+    // Nothing to generate? Return nothing.
+    if( empty($previews_to_check) ) return $previews_to_check;
+    // Get the first one
+    $id = reset($previews_to_check);
+    // Make it a Youtube URL
+    $youtube_url = makeYoutubeUrl($id);
+    // Request preview links
+    $response = requestGifsApi($youtube_url);
+
+    if($response->getBody()) {
+        if($msg){
+          // mark as delivered in RabbitMQ
+          $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+        }
+        // Make Cache id
+        $cache_id = getCacheID($id);
+        // Cache
+        cacheYoutubePreviewFromResponse($cache_id, $response);
+        // Remove from previews_to_check
+        $previews_to_check = array_diff($previews_to_check, array($id));
+        // Update cached list
+        updatePreviewsToCheck($previews_to_check);
+    } else {
+        // $app['monolog']->warning('Failed to decode JSON, will retry later');
+    }
+    // debug( $content );
+    return $previews_to_check;
+  }
+
+  function cacheYoutubePreviewFromResponse($cache_id, $response) {
+    global $cache;
+    $one_day = 3600 * 24;
+
+    $response_json = $response->json();
+    $content = $response_json["success"];
+
+    $cache->set($cache_id, $content, 600);
+
+    return $content;
+  }
+
   function getYoutubePreview($id) {
-    $cache_id = 'youtube_preview_' . $id;
+    $cache_id = getCacheID($id);
     global $cache;
     $one_day = 3600 * 24;
     // Try to get $content from Caching First
@@ -82,9 +166,8 @@
         // Setter action
         $youtube_url = makeYoutubeUrl($id);
         $response = requestGifsApi($youtube_url);
-        $content = $response->json();
 
-        $cache->set($cache_id, $content, $one_day);
+        $content = cacheYoutubePreviewFromResponse($cache_id, $response);
     } else{
         // Getter action
         $content = $cache->get($cache_id);
@@ -102,15 +185,16 @@
 
       if( hasYoutubePreview($id) ){
         $gif = getYoutubePreview($id);
+
         $output[$key]->snippet->thumbnails->gif = (object)[
-          'url' => $gif["success"]["files"]["gif"]
+          'url' => $gif["files"]["gif"]
         ];
         $output[$key]->snippet->thumbnails->mp4 = (object)[
-          'url' => $gif["success"]["files"]["mp4"]
+          'url' => $gif["files"]["mp4"]
         ];
-        // debug( $output[$key]->snippet->thumbnails );
+        // debug( $gif );
       } else {
-        $previews_to_check[] = $id;
+        addPreviewToCheck($id);
       }
     }// foreach
     return $output;
