@@ -155,7 +155,7 @@
     $response_json = $response->json();
     $content = $response_json["success"];
 
-    $cache->set($cache_id, $content, 600);
+    $cache->set($cache_id, $content, 999999999);
 
     return $content;
   }
@@ -208,7 +208,7 @@
 
   function makeConnection(){
     global $AMQPStreamConnection;
-    
+
     if($AMQPStreamConnection){
       $connection = $AMQPStreamConnection;
     } else {
