@@ -6,7 +6,11 @@ include_once('./config.php');
 $tokens = explode('/', $_SERVER['REQUEST_URI']);
 $request = $tokens[1];
 
-if( $request === 'generate-a-preview' ){
+if( $request === $_ENV['VIEW_CACHE'] ){
+	$output = viewCache();
+	debug( $output );
+	die;
+} else if( $request === 'generate-a-preview' ){
 	$output = generateAPreview();
 } else if( $request === 'preview' ){
 	$id = $tokens[2];
@@ -40,7 +44,7 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header("Content-Encoding: none");
 
-//debug( $output );
+// debug( $output );
 echo json_encode($output);
 
 // Close connection
