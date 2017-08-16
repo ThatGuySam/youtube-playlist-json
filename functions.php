@@ -231,3 +231,17 @@
     $channel->close();
     $connection->close();
   }
+
+  function getCachedPreviews($playlist) {
+    global $cache;
+    $previews = array();
+
+    foreach ($playlist as $video) {
+      $id = $video->contentDetails->videoId;
+      $cache_id = getCacheID($id);
+      $preview = $cache->get($cache_id);
+      array_push($previews, $preview);
+    }
+
+    return $previews;
+  }
