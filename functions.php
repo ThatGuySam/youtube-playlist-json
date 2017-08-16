@@ -245,3 +245,14 @@
 
     return $previews;
   }
+
+  function viewCache() {
+    global $cache;
+    $cachedItems = new stdClass();
+
+    $cachedItems->playlist = $cache->get($_ENV['PLAYLIST_ID']);
+
+    $cachedItems->previews = getCachedPreviews($cachedItems->playlist);
+
+    return $cachedItems;
+  }
