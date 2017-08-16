@@ -81,7 +81,7 @@
   function updatePreviewsToCheck($new_previews) {
     global $cache;
     $cache_id = 'previews_to_check';
-    $cache->set($cache_id, $new_previews, 99999999);
+    $cache->set($cache_id, $new_previews);
   }
 
   function getPreviewsToCheck() {
@@ -155,7 +155,7 @@
     $response_json = $response->json();
     $content = $response_json["success"];
 
-    $cache->set($cache_id, $content, 999999999);
+    $cache->set($cache_id, $content);
 
     return $content;
   }
