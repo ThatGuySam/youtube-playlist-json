@@ -1,6 +1,6 @@
 <?php
 
-function debug( $thing ) {
+function debug( $thing, $return = false ) {
 
 	ob_start();
 
@@ -8,8 +8,11 @@ function debug( $thing ) {
 
 	$output = ob_get_clean();
 
-	echo $output;
-
+	if( $return ) {
+		return $output;
+	} else {
+		echo $output;
+	}
 }
 
 function makeYoutubeUrl($id) {
