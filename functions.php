@@ -6,8 +6,11 @@
 
   // Use cache
   use phpFastCache\Helper\Psr16Adapter;
+  use phpFastCache\CacheManager;
   global $cache;
   $cache = new Psr16Adapter('Files');
+
+  $cache_manager = CacheManager::Files();
   // Clear cache
   // $cache->clear();
 
@@ -81,21 +84,23 @@
   function updatePreviewsToCheck($new_previews) {
     global $cache;
     $cache_id = 'previews_to_check';
-    $cache->set($cache_id, $new_previews);
+    $cache->set($cache_id, $new_previews, 9 ^ 9);
   }
 
   function getPreviewsToCheck() {
     global $cache;
+    global $cache_manager;
     $cache_id = 'previews_to_check';
-    $one_day = 3600 * 24;
-    // Try to get $content from Caching First
-    if(!$cache->has($cache_id)){
-        // Setter action
+    // Extend cache time
+    $cache_item = $cache_manager->getItem($cache_id);
+    // Has the cache been created yet?
+    if($cache_item->isHit()){
+      // Get the previews, ignore cache
+      $content = $cache_item->get();
+    } else {
+        // Make a brand new list of preview to check
         $content = array();
         updatePreviewsToCheck($content);
-    } else{
-        // Getter action
-        $content = $cache->get($cache_id);
     }
 
     return $content;
@@ -107,7 +112,7 @@
     $previews = getPreviewsToCheck();
 
     // Not id previews_to_check yet?
-    if(!in_array($id, $previews)){
+    if(!in_array($id, $previews) && is_string($id)){
       // Add it to the array
       array_push($previews, $id);
       // Cache the array
@@ -128,7 +133,8 @@
     // Request preview links
     $response = requestGifsApi($youtube_url);
 
-    if($response->getBody()) {
+    // if there a response and there's an id
+    if($response->getBody() && is_string($id)) {
         if($msg){
           // mark as delivered in RabbitMQ
           $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
@@ -150,38 +156,65 @@
 
   function cacheYoutubePreviewFromResponse($cache_id, $response) {
     global $cache;
+    global $cache_manager;
     $one_day = 3600 * 24;
 
     $response_json = $response->json();
     $content = $response_json["success"];
-
-    $cache->set($cache_id, $content);
+    if($content !== null){
+      $cache->set($cache_id, $content);
+    } else {
+      // Extend cache time
+      $cache_item = $cache_manager->getItem($cache_id);
+      $cache_item->expiresAfter($_ENV('CACHE_TIME'));
+      $content = $cache_item->get();
+    }
 
     return $content;
   }
 
   function getYoutubePreview($id) {
-    $cache_id = getCacheID($id);
+
     global $cache;
-    $one_day = 3600 * 24;
-    // Try to get $content from Caching First
-    if(!$cache->has($cache_id)){
-        // Setter action
+    global $cache_manager;
+    $cache_id = getCacheID($id);
+    // Extend cache time
+    $cache_item = $cache_manager->getItem($cache_id);
+    // Has the cache been created yet?
+    if($cache_item->isHit()){
+      // Get the preview, ignore cache
+      $content = $cache_item->get($cache_id);
+    } else {
+        // Make a brand cache item for this video preview
         $youtube_url = makeYoutubeUrl($id);
         $response = requestGifsApi($youtube_url);
 
         $content = cacheYoutubePreviewFromResponse($cache_id, $response);
-    } else{
-        // Getter action
-        $content = $cache->get($cache_id);
     }
+
+    // Try to get $content from Caching First
+    // if(!$cache->has($cache_id)){
+    //     // Setter action
+    //     $youtube_url = makeYoutubeUrl($id);
+    //     $response = requestGifsApi($youtube_url);
+    //
+    //     $content = cacheYoutubePreviewFromResponse($cache_id, $response);
+    // } else {
+    //     // Getter action
+    //     $content = $cache->get($cache_id);
+    // }
 
     return $content;
   }
 
   function handlePlaylist($playlist) {
     global $previews_to_check;
-    $output = $playlist;
+
+    if($playlist !== null){
+      $output = $playlist;
+    } else {
+      return ['Playlist is null'];
+    }
 
     foreach ($output as $key => $video) {
       $id = $video->contentDetails->videoId;
@@ -233,14 +266,21 @@
   }
 
   function getCachedPreviews($playlist) {
-    global $cache;
+    global $cache_manager;
     $previews = array();
 
     foreach ($playlist as $video) {
+      $preview = new stdClass();
+
       $id = $video->contentDetails->videoId;
       $cache_id = getCacheID($id);
-      $preview = $cache->get($cache_id);
-      array_push($previews, $preview);
+      $cache_item = $cache_manager->getItem($cache_id);
+
+      $preview->cache_id = $cache_id;
+      $preview->hasBeenCreated = $cache_item->isHit();
+      $preview->content = $cache_item->get();
+
+      $previews[$cache_id] = $preview;
     }
 
     return $previews;
