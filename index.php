@@ -10,12 +10,6 @@ if( $request === $_ENV['VIEW_CACHE'] ){
 	$output = viewCache();
 	debug( $output );
 	die;
-} else if( $request === 'generate-a-preview' ){
-	$output = generateAPreview();
-} else if( $request === 'preview' ){
-	$id = $tokens[2];
-	$gif = getYoutubePreview($id);
-	$output = $gif;
 } else {
 	// Use request path as playlist id
 	$playlist_id = $request;
@@ -24,14 +18,9 @@ if( $request === $_ENV['VIEW_CACHE'] ){
 
 }
 
-$previews_to_check = getPreviewsToCheck();
-if(!empty($previews_to_check)){
-	runPreviewWorker();
-}
 //debug( $debug );
 
 	//$youtube_url = makeYoutubeUrl($id);
-	//$result = requestGifsApi($youtube_url);
 
 	//debug( $result );
 
@@ -58,10 +47,5 @@ echo json_encode($output);
 // After HTTP is sent
 
 // echo 'After close';
-//debug( $previews_to_check );
-if( !empty($previews_to_check) ){
-	// Get the first preview that needs to be checked
-	// getYoutubePreview($previews_to_check[0]);
-}
 
 die;

@@ -18,7 +18,3 @@ function debug( $thing, $return = false ) {
 function makeYoutubeUrl($id) {
 	return 'https://www.youtube.com/watch?v=' . $id;
 }
-
-function getCacheID($id) {
-	return 'youtube_preview_' . $id;
-}
